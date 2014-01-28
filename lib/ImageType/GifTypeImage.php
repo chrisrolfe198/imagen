@@ -1,8 +1,8 @@
 <?php
 
-namespace ThatChrisR\Image\ImageType;
+namespace ThatChrisR\Imagen\ImageType;
 
-use ThatChrisR\Image\ImageType\ImageTypeInterface;
+use ThatChrisR\Imagen\ImageType\ImageTypeInterface;
 
 class GifTypeImage implements ImageTypeInterface
 {

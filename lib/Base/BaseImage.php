@@ -1,8 +1,8 @@
 <?php
 
-namespace ThatChrisR\Image\Base;
+namespace ThatChrisR\Imagen\Base;
 
-use ThatChrisR\Image\ImageType\ImageTypeFactory;
+use ThatChrisR\Imagen\ImageType\ImageTypeFactory;
 
 class BaseImage
 {

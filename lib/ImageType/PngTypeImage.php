@@ -1,6 +1,6 @@
 <?php
 
-namespace ThatChrisR\Image\ImageType;
+namespace ThatChrisR\Imagen\ImageType;
 
 class PngTypeImage implements ImageTypeInterface
 {

@@ -1,14 +1,15 @@
 <?php
 
-namespace ThatChrisR\Image\ImageType;
+namespace ThatChrisR\Imagen\ImageType;
 
-use ThatChrisR\Image\ImageType\PngTypeImage;
-use ThatChrisR\Image\ImageType\GifTypeImage;
+use ThatChrisR\Imagen\ImageType\PngTypeImage;
+use ThatChrisR\Imagen\ImageType\GifTypeImage;
 use \Exception as Exception;
 
 class ImageTypeFactory
 {
-	public static $namespace = 'ThatChrisR\Image\ImageType\\';
+	// TODO: Why is this even needed? Surely my use statements should handle this?
+	public static $namespace = 'ThatChrisR\Imagen\ImageType\\';
 
 	public static function create($type)
 	{
