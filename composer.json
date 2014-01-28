@@ -1,0 +1,19 @@
+{
+    "name": "that-chris-r/images",
+    "description": "A package that allows you to manipulate images and overlay text and image using the GD library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Christopher Rolfe",
+            "email": "christopher.rolfe198@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "ThatChrisR\\Image\\": "./lib/",
+            "ThatChrisR\\Image\\Base\\": "./lib/Base/",
+            "ThatChrisR\\Image\\ImageType\\": "./lib/ImageType/"
+        }
+    }
+
+}
