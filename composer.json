@@ -10,7 +10,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "ThatChrisR\\Image\\": "./lib/"
+            "ThatChrisR\\Imagen\\": "./lib/"
         }
     }
 
