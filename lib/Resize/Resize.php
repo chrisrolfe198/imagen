@@ -2,29 +2,39 @@
 
 namespace ThatChrisR\Imagen\Resize;
 
+use ThatChrisR\Imagen\Base\BaseImage;
+
 class Resize
 {
+	private $image;
+	private $width;
+	private $height;
+
 	public function image(BaseImage $image)
 	{
 		$this->image = $image;
+		$this->height = $image->get_image_height();
+		$this->width = $image->get_image_width();
 	}
 
 	public function width($width)
 	{
-		$this->width = $width;
+		$this->newWidth = $width;
 	}
 
 	public function height($height)
 	{
-		$this->height = $height;
+		$this->newHeight = $height;
 	}
 
 	public function resize()
 	{
-		if (($this->height) and ($this->width)) {
-			$newHeight = $this->height;
-			$newWidth = $this->width;
-		}
+		// *** Resample - create image canvas of x, y size
+		$newImage = imagecreatetruecolor($this->newWidth, $this->newHeight);
+
+		imagecopyresampled($newImage, $this->image, 0, 0, 0, 0, $this->newWidth, $this->newHeight, $this->width, $this->height);
+
+		return $newImage;
 	}
 }
 
