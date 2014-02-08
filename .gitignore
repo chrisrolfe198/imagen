@@ -1,3 +1,5 @@
 test.php
-640x80.gif
+*.gif
 /vendor/
+composer.lock
+docs/
