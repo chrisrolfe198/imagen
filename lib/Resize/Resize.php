@@ -23,6 +23,16 @@ class Resize
 	private $image;
 
 	/**
+	 * The current width of the image
+	 */
+	private $width;
+
+	/**
+	 * The current height of the image
+	 */
+	private $height;
+
+	/**
 	 * The desired new width
 	 */
 	private $newWidth;
