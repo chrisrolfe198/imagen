@@ -33,16 +33,6 @@ class Resize
 	private $height;
 
 	/**
-	 * The desired new width
-	 */
-	private $newWidth;
-
-	/**
-	 * The desired new height
-	 */
-	private $newHeight;
-
-	/**
 	 * Sets up the variables
 	 *
 	 * @param BaseImage $image An image created using the base image class
@@ -55,37 +45,17 @@ class Resize
 	}
 
 	/**
-	 * Set the width to resize to
-	 *
-	 * @param int $width The width to resize to
-	 */
-	public function width($width)
-	{
-		$this->newWidth = intval($width);
-		return $this;
-	}
-
-	/**
-	 * Set the height to resize to
-	 *
-	 * @param int $height The height to resize to
-	 */
-	public function height($height)
-	{
-		$this->newHeight = intval($height);
-		return $this;
-	}
-
-	/**
 	 * Carry out the resize
 	 */
-	public function resize()
+	public function resize($width, $height)
 	{
-		// *** Resample - create image canvas of x, y size
+		$newHeight = $height;
+		$newWidth = $width;
+
+		// Create a new image resource with the new height
 		$newImage = imagecreatetruecolor($this->newWidth, $this->newHeight);
 
-		var_dump($this->image);
-
+		// Bend the old and the new
 		imagecopyresampled($newImage, $this->image, 0, 0, 0, 0, $this->newWidth, $this->newHeight, $this->width, $this->height);
 
 		return $newImage;
