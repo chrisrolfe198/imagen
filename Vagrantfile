@@ -52,12 +52,6 @@ Vagrant.configure("2") do |config|
   # Create a static IP
   config.vm.network :private_network, ip: server_ip
 
-  # Use NFS for the shared folder
-  config.vm.synced_folder ".", "/vagrant",
-            id: "core",
-            :nfs => true,
-            :mount_options => ['nolock,vers=3,udp,noatime']
-
   # Optionally customize amount of RAM
   # allocated to the VM. Default is 384MB
   config.vm.provider :virtualbox do |vb|
