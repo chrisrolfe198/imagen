@@ -8,6 +8,9 @@
             "email": "christopher.rolfe198@gmail.com"
         }
     ],
+    "require-dev": {
+        "phpdocumentor/phpdocumentor": "2.*"
+    },
     "autoload": {
         "psr-4": {
             "ThatChrisR\\Imagen\\": "./lib/"

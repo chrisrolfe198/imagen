@@ -1,31 +1,63 @@
 <?php
+/**
+ * Handles resizing objects
+ *
+ * The ideal way this should work is that classes should be chained, E.G. $newImage->width(700)->height(20)->resize();
+ *
+ * @package \ThatChrisR\Imagen
+ * @author Christopher Rolfe christopher.rolfe198@gmail.com
+ */
 
 namespace ThatChrisR\Imagen\Resize;
 
+use ThatChrisR\Imagen\Base\BaseImage;
+
+/**
+ * Handles resizing of images
+ */
 class Resize
 {
-	public function image(BaseImage $image)
+	/**
+	 * An image resource
+	 */
+	private $image;
+
+	/**
+	 * The current width of the image
+	 */
+	private $width;
+
+	/**
+	 * The current height of the image
+	 */
+	private $height;
+
+	/**
+	 * Sets up the variables
+	 *
+	 * @param BaseImage $image An image created using the base image class
+	 */
+	public function __construct(BaseImage $image)
 	{
-		$this->image = $image;
+		$this->image = $image->get_image_resource();
+		$this->height = $image->get_image_height();
+		$this->width = $image->get_image_width();
 	}
 
-	public function width($width)
+	/**
+	 * Carry out the resize
+	 */
+	public function resize($width, $height)
 	{
-		$this->width = $width;
-	}
+		$newHeight = $height;
+		$newWidth = $width;
 
-	public function height($height)
-	{
-		$this->height = $height;
-	}
+		// Create a new image resource with the new height
+		$newImage = imagecreatetruecolor($this->newWidth, $this->newHeight);
 
-	public function resize()
-	{
-		if (($this->height) and ($this->width)) {
-			$newHeight = $this->height;
-			$newWidth = $this->width;
-		}
+		// Bend the old and the new
+		imagecopyresampled($newImage, $this->image, 0, 0, 0, 0, $this->newWidth, $this->newHeight, $this->width, $this->height);
+
+		return $newImage;
 	}
 }
-
-// Resize->image($resource)->width('300')->resize();

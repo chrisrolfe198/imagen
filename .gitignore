@@ -1,4 +1,6 @@
 test.php
-640x80.gif
+*.gif
 /vendor/
 .vagrant
+composer.lock
+docs/
