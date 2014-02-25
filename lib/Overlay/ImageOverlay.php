@@ -9,6 +9,7 @@
 namespace ThatChrisR\Imagen\Overlay;
 
 use ThatChrisR\Imagen\Base\BaseImage;
+use \Exception;
 
 /**
  * Handles overlaying images, this can be useful for things like watermarking
@@ -37,7 +38,11 @@ class ImageOverlay
 		$transparentImageToOverlay = $this->_create_transparent_overlay($imageToOverlay, $this->image);
 
         // Merging
-		$this->_merge_images($transparentImageToOverlay, $overlayHeight, $overlayWidth);
+		try {
+			$this->_merge_images($transparentImageToOverlay, $overlayHeight, $overlayWidth);
+		} catch(Exception $e) {
+			throw new Exception($e->getMessage(), 1);
+		}
 
 		return $this->imageResource;
 	}
@@ -71,9 +76,12 @@ class ImageOverlay
 		return new BaseImage($image);
 	}
 
-	private function _merge_images($imageToOverlay, $overlayHeight, $overlayWidth)
+	private function _merge_images($imageToOverlay, $overlayWidth, $overlayHeight)
 	{
 		// Validation here?
+		if ($overlayHeight > $this->image->get_image_height() && $overlayWidth > $this->image->get_image_width()) {
+			throw new Exception("Overlay image is larger than the background", 1);
+		}
 
 		imagecopymerge(
 			$this->imageResource,	// Image to overlay image onto
