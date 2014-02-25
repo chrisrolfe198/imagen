@@ -19,7 +19,8 @@ class ImageOverlay
 
 	public function __construct(BaseImage $image)
 	{
-		$this->image = $image->get_image_resource();
+		$this->imageResource = $image->get_image_resource();
+		$this->image = $image;
 	}
 
 	public function add_image($image)
@@ -29,16 +30,38 @@ class ImageOverlay
 		}
 
 		// Base variables, should be removed completely when the class is ready
-		$src_w = $image->get_image_width();
-		$src_h = $image->get_image_height();
-		$src_x = 0;
-		$src_y = 0;
+		$overlayHeight = $image->get_image_width();
+		$overlayWidth = $image->get_image_height();
+
+		$image = $this->_create_alpha_layer($image, $this->image);
+
+        // Merging
+		imagecopymerge(
+			$this->imageResource, 	// Image to overlay image onto
+			$image,					// Overlay image
+			0,						// X position on the destination
+			0,						// Y position on the destination
+			0,						// X position from the source
+			0,						// Y position from the source
+			$overlayHeight,			// Source width
+			$overlayWidth,			// Source height
+			100						// opacity, scale of 0-100
+			);
+		return $this->imageResource;
+	}
+
+	private function _create_alpha_layer($overlay, $background)
+	{
+		$src_w = $overlay->get_image_width();
+		$src_h = $overlay->get_image_height();
 		$dst_x = 0;
 		$dst_y = 0;
-		$src_im = $image->get_image_resource();
-		$dst_im = $this->image;
+		$src_x = 0;
+		$src_y = 0;
 
-		// Copying alpha layers
+		$dst_im = $background->get_image_resource();
+		$src_im = $overlay->get_image_resource();
+
 		// creating a cut resource 
         $cut = imagecreatetruecolor($src_w, $src_h);
 
@@ -48,19 +71,7 @@ class ImageOverlay
         // copying relevant section from watermark to the cut resource 
         imagecopy($cut, $src_im, 0, 0, $src_x, $src_y, $src_w, $src_h); 
 
-        // Merging
-		imagecopymerge(
-			$this->image, 			// Image to overlay image onto
-			$cut,					// Overlay image
-			0,						// X position on the destination
-			0,						// Y position on the destination
-			0,						// X position from the source
-			0,						// Y position from the source
-			$image->get_image_height(),	// Source width
-			$image->get_image_width(),	// Source height
-			100						// opacity, scale of 0-100
-			);
-		return $this->image;
+        return $cut;
 	}
 
 	private function _is_base_image($image)
