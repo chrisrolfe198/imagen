@@ -23,41 +23,29 @@ class ImageOverlay
 		$this->image = $image;
 	}
 
-	public function add_image($image)
+	/**
+	 * Overlays the image passed in
+	 */
+	public function add_image($imageToOverlay)
 	{
-		if (!$this->_is_base_image($image)) {
-			$image = new BaseImage($image);
-		}
+		$imageToOverlay = $this->_create_base_image($imageToOverlay);
 
 		// Base variables, should be removed completely when the class is ready
-		$overlayHeight = $image->get_image_width();
-		$overlayWidth = $image->get_image_height();
+		$overlayHeight = $imageToOverlay->get_image_width();
+		$overlayWidth = $imageToOverlay->get_image_height();
 
-		$image = $this->_create_alpha_layer($image, $this->image);
+		$transparentImageToOverlay = $this->_create_transparent_overlay($imageToOverlay, $this->image);
 
         // Merging
-		imagecopymerge(
-			$this->imageResource, 	// Image to overlay image onto
-			$image,					// Overlay image
-			0,						// X position on the destination
-			0,						// Y position on the destination
-			0,						// X position from the source
-			0,						// Y position from the source
-			$overlayHeight,			// Source width
-			$overlayWidth,			// Source height
-			100						// opacity, scale of 0-100
-			);
+		$this->_merge_images($transparentImageToOverlay, $overlayHeight, $overlayWidth);
+
 		return $this->imageResource;
 	}
 
-	private function _create_alpha_layer($overlay, $background)
+	private function _create_transparent_overlay($overlay, $background)
 	{
 		$src_w = $overlay->get_image_width();
 		$src_h = $overlay->get_image_height();
-		$dst_x = 0;
-		$dst_y = 0;
-		$src_x = 0;
-		$src_y = 0;
 
 		$dst_im = $background->get_image_resource();
 		$src_im = $overlay->get_image_resource();
@@ -66,20 +54,37 @@ class ImageOverlay
         $cut = imagecreatetruecolor($src_w, $src_h);
 
         // copying relevant section from background to the cut resource 
-        imagecopy($cut, $dst_im, 0, 0, $dst_x, $dst_y, $src_w, $src_h); 
+        imagecopy($cut, $dst_im, 0, 0, 0, 0, $src_w, $src_h); 
         
         // copying relevant section from watermark to the cut resource 
-        imagecopy($cut, $src_im, 0, 0, $src_x, $src_y, $src_w, $src_h); 
+        imagecopy($cut, $src_im, 0, 0, 0, 0, $src_w, $src_h);
 
         return $cut;
 	}
 
-	private function _is_base_image($image)
+	private function _create_base_image($image)
 	{
 		if (is_a($image, 'ThatChrisR\Imagen\Base\BaseImage')) {
-			return true;
+			return $image;
 		}
 		
-		return false;
+		return new BaseImage($image);
+	}
+
+	private function _merge_images($imageToOverlay, $overlayHeight, $overlayWidth)
+	{
+		// Validation here?
+
+		imagecopymerge(
+			$this->imageResource,	// Image to overlay image onto
+			$imageToOverlay,		// Overlay image
+			0,						// X position on the destination
+			0,						// Y position on the destination
+			0,						// X position from the source
+			0,						// Y position from the source
+			$overlayHeight,			// Source width
+			$overlayWidth,			// Source height
+			100						// opacity, scale of 0-100
+			);
 	}
 }
