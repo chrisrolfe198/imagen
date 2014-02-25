@@ -15,6 +15,7 @@ use ThatChrisR\Imagen\Base\BaseImage;
  */
 class Crop
 {
+	private $image;
 
 	public function __construct(BaseImage $image)
 	{

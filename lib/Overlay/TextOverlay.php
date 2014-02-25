@@ -18,7 +18,7 @@ class TextOverlay
 	/**
 	 * Holds the image to manipulate, must be an instance of BaseImage
 	 */
-	public $_image;
+	private $image;
 
 	/**
 	 * An array to handle fonts
@@ -32,7 +32,7 @@ class TextOverlay
 
 	public function __construct(BaseImage $image)
 	{
-		$this->_image = $image->get_image_resource();
+		$this->image = $image->get_image_resource();
 	}
 
 	/**
@@ -64,7 +64,7 @@ class TextOverlay
 		}
 
 		imagettftext(
-			$this->_image,					// Image resource
+			$this->image,					// Image resource
 			$size,							// Font size
 			0,								// Font Angle
 			30,								// X position
@@ -73,13 +73,13 @@ class TextOverlay
 			self::$fonts[$font_name],		// Font to use from array
 			$text 							// Text to add
 			);
-		return $this->_image;
+		return $this->image;
 	}
 
 	protected function _create_hex_colour_resource($colour) {
 		$first = intval(substr($colour, 0, 2));
 		$second = intval(substr($colour, 2, 2));
 		$third = intval(substr($colour, 4, 2));
-		return imagecolorallocate($this->_image, $first, $second, $third);
+		return imagecolorallocate($this->image, $first, $second, $third);
 	}
 }
