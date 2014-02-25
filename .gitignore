@@ -5,3 +5,4 @@ test.php
 composer.lock
 docs/
 *.swp
+*.ttf
