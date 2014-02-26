@@ -76,7 +76,8 @@ class ImageOverlay
 	 */
 	private function _calculate_percentage($orig, $newPercent, $newHeight)
 	{
-		return (int) ($orig * ($newPercent / 100)) - $newHeight;
+
+		return (int) (($orig - $newHeight) * ($newPercent / 100));
 	}
 
 	/**
