@@ -16,16 +16,30 @@ use \Exception;
  */
 class ImageOverlay
 {
+	/**
+	 * Instance of BaseImage holding the background image
+	 */
 	private $image;
 
+	/**
+	 * The image resource of the background, same resource as you would get if used imagecreatefrompng
+	 */
+	private $imageResource;
+
+	/**
+	 * Loads up the background image and resource into local variables
+	 */
 	public function __construct(BaseImage $image)
 	{
 		$this->imageResource = $image->get_image_resource();
 		$this->image = $image;
 	}
-
 	/**
 	 * Overlays the image passed in
+	 * @param mixed   $imageToOverlay Either a path to an image or an instance of BaseImage
+	 * @param integer $xpos
+	 * @param integer $ypos
+	 * @return image resource The image with the appropriate image overlayed
 	 */
 	public function add_image($imageToOverlay, $xpos = 0, $ypos = 0)
 	{
@@ -34,10 +48,12 @@ class ImageOverlay
 		// Base variables, should be removed completely when the class is ready
 		$overlayHeight = $imageToOverlay->get_image_height();
 		$overlayWidth = $imageToOverlay->get_image_width();
+		$baseHeight = $this->image->get_image_height();
+		$baseWidth = $this->image->get_image_width();
 
 		// Create the positioning values for the overlay based on the percentages passed in
-		$overlayXpos = $this->_calculate_percentage($overlayWidth, $xpos);
-		$overlayYpos = $this->_calculate_percentage($overlayHeight, $ypos);
+		$overlayXpos = $this->_calculate_percentage($baseWidth, $xpos, $overlayWidth);
+		$overlayYpos = $this->_calculate_percentage($baseHeight, $ypos, $overlayHeight);
 
 		$transparentImageToOverlay = $this->_create_transparent_overlay($imageToOverlay, $overlayXpos, $overlayYpos);
 
@@ -51,11 +67,25 @@ class ImageOverlay
 		return $this->imageResource;
 	}
 
-	private function _calculate_percentage($orig, $new)
+	/**
+	 * Calculate's the position of an overlay based on a percentage
+	 * @param  integer $orig
+	 * @param  integer $newPercent
+	 * @param  integer $newHeight
+	 * @return integer
+	 */
+	private function _calculate_percentage($orig, $newPercent, $newHeight)
 	{
-		return ($orig * ($new / 100));
+		return (int) ($orig * ($newPercent / 100)) - $newHeight;
 	}
 
+	/**
+	 * Creates a proper overlay for transparent images
+	 * @param  BaseImage $overlay
+	 * @param  integer $xpos
+	 * @param  integer $ypos
+	 * @return image resource
+	 */
 	private function _create_transparent_overlay($overlay, $xpos, $ypos)
 	{
 		$src_w = $overlay->get_image_width();
@@ -76,6 +106,11 @@ class ImageOverlay
         return $cut;
 	}
 
+	/**
+	 * Creates an instance of BaseImage or returns the item if it is already one
+	 * @param  mixed $image
+	 * @return BaseImage
+	 */
 	private function _create_base_image($image)
 	{
 		if (is_a($image, 'ThatChrisR\Imagen\Base\BaseImage')) {
@@ -85,9 +120,16 @@ class ImageOverlay
 		return new BaseImage($image);
 	}
 
+	/**
+	 * Merges images together
+	 * @param  image resource $imageToOverlay
+	 * @param  integer $overlayWidth
+	 * @param  integer $overlayHeight
+	 * @param  integer $xpos
+	 * @param  integer $ypos
+	 */
 	private function _merge_images($imageToOverlay, $overlayWidth, $overlayHeight, $xpos, $ypos)
 	{
-		// Validation here?
 		if ($overlayHeight > $this->image->get_image_height() || $overlayWidth > $this->image->get_image_width()) {
 			throw new Exception("Overlay image is larger than the background", 1);
 		}
