@@ -35,7 +35,7 @@ class ImageOverlay
 		$overlayHeight = $imageToOverlay->get_image_width();
 		$overlayWidth = $imageToOverlay->get_image_height();
 
-		$transparentImageToOverlay = $this->_create_transparent_overlay($imageToOverlay, $this->image);
+		$transparentImageToOverlay = $this->_create_transparent_overlay($imageToOverlay);
 
         // Merging
 		try {
@@ -47,16 +47,16 @@ class ImageOverlay
 		return $this->imageResource;
 	}
 
-	private function _create_transparent_overlay($overlay, $background)
+	private function _create_transparent_overlay($overlay)
 	{
 		$src_w = $overlay->get_image_width();
 		$src_h = $overlay->get_image_height();
 
-		$dst_im = $background->get_image_resource();
+		$dst_im = $this->image->get_image_resource();
 		$src_im = $overlay->get_image_resource();
 
 		// creating a cut resource 
-        $cut = imagecreatetruecolor($src_w, $src_h);
+        $cut = imagecreatetruecolor(50, 128);
 
         // copying relevant section from background to the cut resource 
         imagecopy($cut, $dst_im, 0, 0, 0, 0, $src_w, $src_h); 
@@ -79,7 +79,7 @@ class ImageOverlay
 	private function _merge_images($imageToOverlay, $overlayWidth, $overlayHeight)
 	{
 		// Validation here?
-		if ($overlayHeight > $this->image->get_image_height() && $overlayWidth > $this->image->get_image_width()) {
+		if ($overlayHeight > $this->image->get_image_height() || $overlayWidth > $this->image->get_image_width()) {
 			throw new Exception("Overlay image is larger than the background", 1);
 		}
 
