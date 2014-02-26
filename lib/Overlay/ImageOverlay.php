@@ -27,7 +27,7 @@ class ImageOverlay
 	/**
 	 * Overlays the image passed in
 	 */
-	public function add_image($imageToOverlay)
+	public function add_image($imageToOverlay, $xpos = 0, $ypos = 0)
 	{
 		$imageToOverlay = $this->_create_base_image($imageToOverlay);
 
@@ -35,11 +35,15 @@ class ImageOverlay
 		$overlayHeight = $imageToOverlay->get_image_height();
 		$overlayWidth = $imageToOverlay->get_image_width();
 
-		$transparentImageToOverlay = $this->_create_transparent_overlay($imageToOverlay);
+		// Create the positioning values for the overlay based on the percentages passed in
+		$overlayXpos = $this->_calculate_percentage($overlayWidth, $xpos);
+		$overlayYpos = $this->_calculate_percentage($overlayHeight, $ypos);
+
+		$transparentImageToOverlay = $this->_create_transparent_overlay($imageToOverlay, $overlayXpos, $overlayYpos);
 
         // Merging
 		try {
-			$this->_merge_images($transparentImageToOverlay, $overlayHeight, $overlayWidth);
+			$this->_merge_images($transparentImageToOverlay, $overlayHeight, $overlayWidth, $overlayXpos, $overlayYpos);
 		} catch(Exception $e) {
 			throw new Exception($e->getMessage(), 1);
 		}
@@ -47,7 +51,12 @@ class ImageOverlay
 		return $this->imageResource;
 	}
 
-	private function _create_transparent_overlay($overlay)
+	private function _calculate_percentage($orig, $new)
+	{
+		return ($orig * ($new / 100));
+	}
+
+	private function _create_transparent_overlay($overlay, $xpos, $ypos)
 	{
 		$src_w = $overlay->get_image_width();
 		$src_h = $overlay->get_image_height();
@@ -59,7 +68,7 @@ class ImageOverlay
         $cut = imagecreatetruecolor($src_w, $src_h);
 
         // copying relevant section from background to the cut resource 
-        imagecopy($cut, $dst_im, 0, 0, 0, 0, $src_w, $src_h); 
+        imagecopy($cut, $dst_im, 0, 0, $xpos, $ypos, $src_w, $src_h); 
         
         // copying relevant section from watermark to the cut resource 
         imagecopy($cut, $src_im, 0, 0, 0, 0, $src_w, $src_h);
@@ -76,7 +85,7 @@ class ImageOverlay
 		return new BaseImage($image);
 	}
 
-	private function _merge_images($imageToOverlay, $overlayWidth, $overlayHeight)
+	private function _merge_images($imageToOverlay, $overlayWidth, $overlayHeight, $xpos, $ypos)
 	{
 		// Validation here?
 		if ($overlayHeight > $this->image->get_image_height() || $overlayWidth > $this->image->get_image_width()) {
@@ -86,8 +95,8 @@ class ImageOverlay
 		imagecopymerge(
 			$this->imageResource,	// Image to overlay image onto
 			$imageToOverlay,		// Overlay image
-			0,						// X position on the destination
-			0,						// Y position on the destination
+			$xpos,					// X position on the destination
+			$ypos,					// Y position on the destination
 			0,						// X position from the source
 			0,						// Y position from the source
 			$overlayHeight,			// Source width
