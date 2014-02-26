@@ -32,8 +32,8 @@ class ImageOverlay
 		$imageToOverlay = $this->_create_base_image($imageToOverlay);
 
 		// Base variables, should be removed completely when the class is ready
-		$overlayHeight = $imageToOverlay->get_image_width();
-		$overlayWidth = $imageToOverlay->get_image_height();
+		$overlayHeight = $imageToOverlay->get_image_height();
+		$overlayWidth = $imageToOverlay->get_image_width();
 
 		$transparentImageToOverlay = $this->_create_transparent_overlay($imageToOverlay);
 
@@ -56,7 +56,7 @@ class ImageOverlay
 		$src_im = $overlay->get_image_resource();
 
 		// creating a cut resource 
-        $cut = imagecreatetruecolor(50, 128);
+        $cut = imagecreatetruecolor($src_w, $src_h);
 
         // copying relevant section from background to the cut resource 
         imagecopy($cut, $dst_im, 0, 0, 0, 0, $src_w, $src_h); 
