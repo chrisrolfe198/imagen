@@ -77,6 +77,12 @@ class BaseImage
 	 */
 	private function _get_image($imagePath)
 	{
+		if(is_resource($imagePath)) {
+			if (get_resource_type($imagePath) == 'gd') {
+				return $imagePath;
+			}
+		}
+
 		// Create our factory and get a class that can instantiate the image
 		$imageFactory = new ImageTypeFactory();
 		$imageType = $imageFactory::create(pathinfo($imagePath, PATHINFO_EXTENSION));
