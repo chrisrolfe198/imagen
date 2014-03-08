@@ -70,6 +70,11 @@ class BaseImage
 		return $this->_image;
 	}
 
+	public function set_image_resource($image)
+	{
+		$this->_image = $image;
+	}
+
 	/**
 	 * Creates an image from the factory and returns the image resource
 	 *
