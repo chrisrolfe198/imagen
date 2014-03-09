@@ -54,8 +54,9 @@ class TextOverlay
 	/**
 	 * Adds text to an image
 	 * @todo migrate the creation of a colour resource out of the function
+	 * @todo Set the xpos and ypos to be done based on percentages
 	 */
-	public function add_text($text, $colour_name, $font_name, $size = 16)
+	public function add_text($text, $colour_name, $font_name, $xpos = 0, $ypos = 0, $size = 16)
 	{
 		$colour = self::$colours[$colour_name];
 
@@ -67,8 +68,8 @@ class TextOverlay
 			$this->image,					// Image resource
 			$size,							// Font size
 			0,								// Font Angle
-			30,								// X position
-			30,								// Y position
+			$xpos,							// X position
+			$ypos,							// Y position
 			self::$colours[$colour_name],	// Colour to use from the array
 			self::$fonts[$font_name],		// Font to use from array
 			$text 							// Text to add
