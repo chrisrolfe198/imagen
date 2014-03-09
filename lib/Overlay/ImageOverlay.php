@@ -69,9 +69,9 @@ class ImageOverlay
 
 	/**
 	 * Calculate's the position of an overlay based on a percentage
-	 * @param  integer $orig
-	 * @param  integer $newPercent
-	 * @param  integer $newHeight
+	 * @param  integer $orig 			The original height or width
+	 * @param  integer $newPercent		The percentage to place the item at
+	 * @param  integer $newHeight 		The height of the item being positioned
 	 * @return integer
 	 */
 	private function _calculate_percentage($orig, $newPercent, $newHeight)
