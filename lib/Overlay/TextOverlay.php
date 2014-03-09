@@ -17,6 +17,7 @@ class TextOverlay
 {
 	/**
 	 * Holds the image to manipulate, must be an instance of BaseImage
+	 * @todo Why is this an instance of an image resource? This should be an instance of BaseImage
 	 */
 	private $image;
 
@@ -55,13 +56,18 @@ class TextOverlay
 	 * Adds text to an image
 	 * @todo migrate the creation of a colour resource out of the function
 	 * @todo Set the xpos and ypos to be done based on percentages
+	 * @todo Once the todo to migrate the image property to being an instance of BaseImage is done imagesx/y should be removed
 	 */
 	public function add_text($text, $colour_name, $font_name, $xpos = 0, $ypos = 0, $size = 16)
 	{
+
+		$xpos = $this->_calculate_percentage(imagesx($this->image), $xpos, $size);
+		$ypos = $this->_calculate_percentage(imagesy($this->image), $ypos, $size);
+
 		$colour = self::$colours[$colour_name];
 
 		if (is_string($colour)) {
-			self::$colours[$colour_name] = $this->_create_hex_colour_resource($colour);
+			self::$colours[$colour_name] = $this->_create_colour_resource($colour);
 		}
 
 		imagettftext(
@@ -77,10 +83,27 @@ class TextOverlay
 		return $this->image;
 	}
 
-	protected function _create_hex_colour_resource($colour) {
-		$first = intval(substr($colour, 0, 2));
-		$second = intval(substr($colour, 2, 2));
-		$third = intval(substr($colour, 4, 2));
+	/**
+	 * Creates an image colour using RGB and return it
+	 */
+	protected function _create_colour_resource($colour)
+	{
+		$first = intval(substr($colour, 0, 3));
+		$second = intval(substr($colour, 3, 3));
+		$third = intval(substr($colour, 6, 3));
+
 		return imagecolorallocate($this->image, $first, $second, $third);
+	}
+
+	/**
+	 * Calculate's the position of an overlay based on a percentage
+	 * @param  integer $orig 			The original height or width
+	 * @param  integer $newPercent		The percentage to place the item at
+	 * @param  integer $newHeight 		The height of the item being positioned
+	 * @return integer
+	 */
+	private function _calculate_percentage($orig, $newPercent, $newHeight)
+	{
+		return (int) ($orig * ($newPercent / 100));
 	}
 }
