@@ -61,7 +61,7 @@ class TextOverlay
 	public function add_text($text, $colour_name, $font_name, $xpos = 0, $ypos = 0, $size = 16)
 	{
 
-		$xpos = $this->_calculate_percentage(imagesx($this->image), $xpos, $size);
+		$xpos = $this->_calculate_percentage(imagesx($this->image), $xpos);
 		$ypos = $this->_calculate_percentage(imagesy($this->image), $ypos, $size);
 
 		$colour = self::$colours[$colour_name];
@@ -104,6 +104,6 @@ class TextOverlay
 	 */
 	private function _calculate_percentage($orig, $newPercent, $newHeight)
 	{
-		return (int) ($orig * ($newPercent / 100));
+		return (int) ($orig * ($newPercent / 100)) + $newHeight;
 	}
 }
