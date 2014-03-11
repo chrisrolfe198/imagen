@@ -102,7 +102,7 @@ class TextOverlay
 	 * @param  integer $newHeight 		The height of the item being positioned
 	 * @return integer
 	 */
-	private function _calculate_percentage($orig, $newPercent, $newHeight)
+	private function _calculate_percentage($orig, $newPercent, $newHeight = 0)
 	{
 		return (int) ($orig * ($newPercent / 100)) + $newHeight;
 	}
