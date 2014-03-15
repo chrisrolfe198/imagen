@@ -6,7 +6,7 @@
  * @author Christopher Rolfe christopher.rolfe198@gmail.com
  */
 
-namespace ThatChrisR\Imagen\Overlay;
+namespace ThatChrisR\Imagen\Overlay\Text;
 
 use ThatChrisR\Imagen\Base\BaseImage;
 
@@ -78,17 +78,15 @@ class TextOverlay
 			self::$stroke[$colour_name] = $this->_create_colour_resource(self::$stroke[$colour_name]);
 		}
 
-		imagettfstroketext(
+		imagettftext(
 			$this->image,					// Image resource
 			$size,							// Font size
 			0,								// Font Angle
 			$xpos,							// X position
 			$ypos,							// Y position
 			self::$colours[$colour_name],	// Colour to use from the array
-			self::$stroke[$colour_name],	// Colour to use from the array
 			self::$fonts[$font_name],		// Font to use from array
 			$text, 							// Text to add
-			$stroke 
 			);
 		return $this->image;
 	}
