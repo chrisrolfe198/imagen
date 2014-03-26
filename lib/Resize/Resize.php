@@ -49,15 +49,13 @@ class Resize
 	 */
 	public function resize($width, $height)
 	{
-		$newHeight = $height;
-		$newWidth = $width;
+		$newImg = imagecreatetruecolor($width, $height);
+		imagealphablending($newImg, false);
+		imagesavealpha($newImg,true);
+		$transparent = imagecolorallocatealpha($newImg, 255, 255, 255, 127);
+		imagefilledrectangle($newImg, 0, 0, $width, $height, $transparent);
+		imagecopyresampled($newImg, $this->image, 0, 0, 0, 0, $width, $height, $this->width, $this->height);
 
-		// Create a new image resource with the new height
-		$newImage = imagecreatetruecolor($this->newWidth, $this->newHeight);
-
-		// Bend the old and the new
-		imagecopyresampled($newImage, $this->image, 0, 0, 0, 0, $this->newWidth, $this->newHeight, $this->width, $this->height);
-
-		return $newImage;
+		return $newImg;
 	}
 }
