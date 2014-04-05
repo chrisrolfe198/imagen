@@ -9,6 +9,7 @@
 namespace ThatChrisR\Imagen\Base;
 
 use ThatChrisR\Imagen\ImageType\ImageTypeFactory;
+use \Exception;
 
 /**
  * The base class to handle accessing the image properties
@@ -37,7 +38,11 @@ class BaseImage
 	 */
 	public function __construct($imagePath)
 	{
-		$this->_image = $this->_get_image($imagePath);
+		try {
+			$this->_image = $this->_get_image($imagePath);
+		} catch (Exception $e) {
+			throw new Exception($e->getMessage());
+		}
 		$this->_width = imagesx($this->_image);
 		$this->_height = imagesy($this->_image);
 	}
@@ -90,9 +95,13 @@ class BaseImage
 
 		// Create our factory and get a class that can instantiate the image
 		$imageFactory = new ImageTypeFactory();
-		$imageType = $imageFactory::create(pathinfo($imagePath, PATHINFO_EXTENSION));
-		// Because the class implements our interface we know it has a create image method
-		$image = $imageType->create_image($imagePath);
-		return $image;
+		try {
+			$imageType = $imageFactory::create(pathinfo($imagePath, PATHINFO_EXTENSION));
+			// Because the class implements our interface we know it has a create image method
+			$image = $imageType->create_image($imagePath);
+			return $image;
+		} catch (Exception $e) {
+			throw new Exception($e->getMessage());
+		}
 	}
 }
