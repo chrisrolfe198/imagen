@@ -47,6 +47,11 @@ class BaseImage
 		$this->_height = imagesy($this->_image);
 	}
 
+	public function __toString()
+	{
+		return $this->_image;
+	}
+
 	/**
 	 * Simple getter to return the image height
 	 */
